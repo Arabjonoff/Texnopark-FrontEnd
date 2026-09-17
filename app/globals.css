@@ -116,6 +116,15 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Gorizontal karusellarda skrollbarni yashirish */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

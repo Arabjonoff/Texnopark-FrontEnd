@@ -394,6 +394,44 @@ export const RESOURCES: Record<string, Resource> = {
     ],
   },
 
+  team: {
+    key: "team",
+    endpoint: "/team/",
+    title: "Jamoa",
+    singular: "Jamoa a'zosi",
+    description: "\"Biz haqimizda\" sahifasidagi jamoa bo'limi",
+    multipart: true,
+    searchPlaceholder: "Ism yoki lavozim",
+    titleField: "name",
+    defaults: { order: 0, isPublished: true },
+    sections: [
+      {
+        title: "Shaxs",
+        fields: [
+          { name: "name", label: "Ism-familiya", type: "text", required: true },
+          { name: "role", label: "Lavozimi", type: "text", required: true, placeholder: "Mentor, Flutter yo'nalishi" },
+          { name: "photo", label: "Rasm", type: "image", full: true, help: "Vertikal (3:4) rasm tavsiya etiladi. Rasm bo'lmasa ism bosh harflari ko'rsatiladi" },
+          { name: "bio", label: "Qisqacha", type: "textarea", rows: 2, full: true, help: "Kartaga kursor olib borilganda ko'rinadi (ixtiyoriy)" },
+        ],
+      },
+      {
+        title: "Havolalar va ko'rinish",
+        fields: [
+          { name: "telegramUrl", label: "Telegram", type: "url", placeholder: "https://t.me/..." },
+          { name: "linkedinUrl", label: "LinkedIn", type: "url", placeholder: "https://linkedin.com/in/..." },
+          { name: "order", label: "Tartib raqami", type: "number", help: "Kichik raqam oldinroq ko'rsatiladi" },
+          { name: "isPublished", label: "Saytda ko'rsatilsin", type: "switch" },
+        ],
+      },
+    ],
+    columns: [
+      { name: "photo", label: "", type: "image", hideOnMobile: true },
+      { name: "name", label: "Ism-familiya", type: "title", subtitle: "role" },
+      { name: "order", label: "Tartib", type: "number", align: "right", hideOnMobile: true },
+      { name: "isPublished", label: "Holati", type: "badge", badges: PUBLISHED_BADGES },
+    ],
+  },
+
   partners: {
     key: "partners",
     endpoint: "/partners/",

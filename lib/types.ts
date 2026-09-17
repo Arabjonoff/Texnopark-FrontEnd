@@ -82,6 +82,16 @@ export type Equipment = Feature & {
   image: string | null;
 };
 
+export type TeamMember = {
+  id: number;
+  name: string;
+  role: string;
+  photo: string | null;
+  bio: string;
+  telegramUrl: string;
+  linkedinUrl: string;
+};
+
 export type Partner = {
   id: number;
   name: string;

@@ -14,6 +14,7 @@ import type {
   PostSummary,
   SiteSettings,
   Statistic,
+  TeamMember,
   VideoStory,
 } from "@/lib/types";
 
@@ -80,6 +81,7 @@ export const getStatistics = () => apiFetchList<Statistic>("/statistics/");
 export const getFeatures = () => apiFetchList<Feature>("/features/");
 export const getEquipment = () => apiFetchList<Equipment>("/equipment/");
 export const getPartners = () => apiFetchList<Partner>("/partners/");
+export const getTeam = () => apiFetchList<TeamMember>("/team/");
 export const getVideoStories = () => apiFetchList<VideoStory>("/video-stories/");
 
 /** Footer va aloqa sahifasi uchun. Ishlamasa `undefined` — layout buzilmaydi. */
