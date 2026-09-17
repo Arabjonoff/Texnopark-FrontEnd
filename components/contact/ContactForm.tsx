@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { CheckCircle, Loader2 } from "lucide-react";
-import { sendApplication, type ContactFormState } from "@/app/contact/actions";
+import { sendApplication, type ContactFormState } from "@/app/(site)/contact/actions";
 import { cn } from "@/lib/utils";
 import type { ApplicationType, CourseSummary, EventSummary, FieldErrors } from "@/lib/types";
 

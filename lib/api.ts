@@ -21,6 +21,7 @@ const API_URL = (process.env.API_URL ?? "http://127.0.0.1:8000/api").replace(/\/
 
 // Kontent admin panelda o'zgargandan keyin sahifalar shuncha soniyada yangilanadi (ISR)
 export const REVALIDATE_SECONDS = 60;
+export const CONTENT_TAG = "content";
 
 class ApiError extends Error {
   constructor(public status: number, path: string) {
@@ -30,7 +31,8 @@ class ApiError extends Error {
 
 async function apiFetch<T>(path: string): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
-    next: { revalidate: REVALIDATE_SECONDS },
+    // "content" tegi: dashboard kontentni o'zgartirganda sahifalar darhol yangilanadi
+    next: { revalidate: REVALIDATE_SECONDS, tags: [CONTENT_TAG] },
   });
   if (!res.ok) throw new ApiError(res.status, path);
   return res.json();

@@ -11,6 +11,17 @@
   --color-card-foreground: var(--card-foreground);
 
   --font-sans: var(--font-sans);
+
+  /* Dashboard tokenlari (light/dark qiymatlari pastda) */
+  --color-dash-bg: var(--dash-bg);
+  --color-dash-surface: var(--dash-surface);
+  --color-dash-subtle: var(--dash-subtle);
+  --color-dash-border: var(--dash-border);
+  --color-dash-text: var(--dash-text);
+  --color-dash-muted: var(--dash-muted);
+  --color-dash-primary: var(--dash-primary);
+  --color-dash-primary-hover: var(--dash-primary-hover);
+  --color-dash-chart: var(--dash-chart);
 }
 
 :root {
@@ -35,6 +46,33 @@ body {
   font-family: var(--font-sans), sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Dashboard ranglari. Grafik rangi (--dash-chart) har ikki fonda kontrast bo'yicha tekshirilgan. */
+:root {
+  --dash-bg: #f5f7fa;
+  --dash-surface: #ffffff;
+  --dash-subtle: #f1f4f8;
+  --dash-border: #e2e7ee;
+  --dash-text: #0f172a;
+  --dash-muted: #64748b;
+  --dash-primary: #2563eb;
+  --dash-primary-hover: #1d4ed8;
+  --dash-chart: #2563eb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dash-bg: #0a1020;
+    --dash-surface: #0f172a;
+    --dash-subtle: #16203a;
+    --dash-border: #1f2b42;
+    --dash-text: #e6eaf2;
+    --dash-muted: #94a3b8;
+    --dash-primary: #3b82f6;
+    --dash-primary-hover: #60a5fa;
+    --dash-chart: #3b82f6;
+  }
 }
 
 /* Typography Scale enhancements */
