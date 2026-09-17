@@ -513,6 +513,18 @@ export const SITE_SETTINGS_SECTIONS: Section[] = [
     ],
   },
   {
+    title: "Bosh sahifa kartasi",
+    description: "Bosh sahifaning yuqorisidagi katta karta: rasm yoki video",
+    fields: [
+      { name: "heroImage", label: "Rasm", type: "image", full: true, help: "Video havolasi bo'sh bo'lsa shu rasm ko'rsatiladi" },
+      {
+        name: "heroVideoUrl", label: "Video havolasi", type: "url", full: true,
+        placeholder: "https://youtu.be/... yoki https://.../video.mp4",
+        help: "YouTube/Vimeo havolasi yoki to'g'ridan-to'g'ri .mp4 havolasi. Kiritilsa rasm o'rniga video ko'rsatiladi",
+      },
+    ],
+  },
+  {
     title: "Ijtimoiy tarmoqlar",
     description: "Bo'sh qoldirilgan tarmoq saytda ko'rsatilmaydi",
     fields: [

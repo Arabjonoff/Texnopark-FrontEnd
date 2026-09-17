@@ -14,6 +14,7 @@ import {
   getEvents,
   getFeatures,
   getPartners,
+  getSiteSettings,
   getStatistics,
   getVideoStories,
 } from "@/lib/api";
@@ -21,7 +22,7 @@ import {
 export const revalidate = 60;
 
 export default async function Home() {
-  const [courses, events, stats, features, stories, equipment, partners] = await Promise.all([
+  const [courses, events, stats, features, stories, equipment, partners, settings] = await Promise.all([
     getCourses(),
     getEvents(),
     getStatistics(),
@@ -29,11 +30,12 @@ export default async function Home() {
     getVideoStories(),
     getEquipment(),
     getPartners(),
+    getSiteSettings(),
   ]);
 
   return (
     <div className="flex flex-col gap-12 pb-12">
-      <Hero />
+      <Hero image={settings?.heroImage ?? null} videoUrl={settings?.heroVideoUrl ?? ""} />
       <Statistics stats={stats} />
       <DirectionsBento courses={courses} />
       <WhyTechnoPark features={features} />

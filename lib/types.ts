@@ -61,6 +61,8 @@ export type SiteSettings = {
   telegramUrl: string;
   facebookUrl: string;
   youtubeUrl: string;
+  heroImage: string | null;
+  heroVideoUrl: string;
 };
 
 export type Statistic = {

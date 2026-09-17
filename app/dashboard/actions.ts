@@ -208,7 +208,8 @@ export async function deleteApplication(id: number) {
 // --- Sayt sozlamalari ------------------------------------------------------------------------
 
 export async function saveSiteSettings(_prev: FormState, formData: FormData): Promise<FormState> {
-  const body = readFields(SITE_SETTINGS_SECTIONS, formData, false) as Record<string, unknown>;
+  // Rasm yuklash uchun multipart
+  const body = readFields(SITE_SETTINGS_SECTIONS, formData, true);
   const result = await dashRequest("/site-settings/", { method: "PUT", body });
   if (!result.ok) return failure(result.status, result.data);
   updateTag(CONTENT_TAG);

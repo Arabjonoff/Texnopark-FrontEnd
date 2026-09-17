@@ -3,8 +3,73 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Sparkles, PlayCircle } from "lucide-react";
+import { parseVideoUrl } from "@/lib/video";
 
-export function Hero() {
+/** Karta ichidagi media: video havolasi bo'lsa video, bo'lmasa rasm, ikkalasi ham bo'lmasa placeholder */
+function HeroMedia({ image, videoUrl }: { image: string | null; videoUrl: string }) {
+  const video = parseVideoUrl(videoUrl);
+
+  if (video?.kind === "file") {
+    return (
+      <video
+        src={video.src}
+        poster={image ?? undefined}
+        autoPlay
+        muted
+        loop
+        playsInline
+        controls
+        className="h-full w-full object-cover"
+      />
+    );
+  }
+
+  if (video?.kind === "embed") {
+    return (
+      <iframe
+        src={video.src}
+        title="Andijon Yoshlar Texnoparki videosi"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="h-full w-full"
+      />
+    );
+  }
+
+  if (image) {
+    const media = (
+      // eslint-disable-next-line @next/next/no-img-element -- admin yuklagan rasm
+      <img src={image} alt="Andijon Yoshlar Texnoparki" className="h-full w-full object-cover" />
+    );
+    // Havola YouTube/Vimeo emas (masalan Instagram) — rasm ustiga Play tugmasi
+    return video?.kind === "link" ? (
+      <a href={video.src} target="_blank" rel="noopener noreferrer" className="group/media relative block h-full w-full" aria-label="Videoni ko'rish">
+        {media}
+        <span className="absolute inset-0 flex items-center justify-center bg-black/30 transition-colors group-hover/media:bg-black/40">
+          <PlayCircle className="h-16 w-16 text-white" />
+        </span>
+      </a>
+    ) : (
+      media
+    );
+  }
+
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="p-8 text-center">
+        <div className="mx-auto mb-4 flex h-24 w-24 animate-pulse items-center justify-center rounded-2xl bg-blue-500/20">
+          <Sparkles className="h-10 w-10 text-blue-600" />
+        </div>
+        <h2 className="text-xl font-bold text-foreground/80">Rasm yoki video</h2>
+        <p className="mt-2 text-sm text-foreground/50">
+          Boshqaruv panelidagi &quot;Sayt sozlamalari&quot; bo&apos;limidan qo&apos;shiladi
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export function Hero({ image = null, videoUrl = "" }: { image?: string | null; videoUrl?: string }) {
   return (
     <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
       {/* Background Decorative Elements */}
@@ -81,15 +146,9 @@ export function Hero() {
             className="relative lg:h-[600px] rounded-3xl overflow-hidden glass-card p-4 flex items-center justify-center"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 -z-10" />
-            {/* Placeholder for 3D element or high quality image */}
-            <div className="relative w-full h-full rounded-2xl overflow-hidden bg-foreground/5 flex items-center justify-center border border-foreground/10">
-               <div className="text-center p-8">
-                  <div className="w-24 h-24 rounded-2xl bg-blue-500/20 mx-auto mb-4 flex items-center justify-center animate-pulse">
-                    <Sparkles className="w-10 h-10 text-blue-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-foreground/80">3D / Video Element</h3>
-                  <p className="text-sm text-foreground/50 mt-2">Placeholder for dynamic visual composition</p>
-               </div>
+            {/* Rasm/video boshqaruv panelidan (Sayt sozlamalari -> Bosh sahifa kartasi) */}
+            <div className="relative w-full h-full min-h-[320px] rounded-2xl overflow-hidden bg-foreground/5 border border-foreground/10">
+              <HeroMedia image={image} videoUrl={videoUrl} />
             </div>
           </motion.div>
 
