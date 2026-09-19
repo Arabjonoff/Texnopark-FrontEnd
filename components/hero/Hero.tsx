@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Sparkles, PlayCircle } from "lucide-react";
 import { parseVideoUrl } from "@/lib/video";
+import { cn } from "@/lib/utils";
 
 /** Karta ichidagi media: video havolasi bo'lsa video, bo'lmasa rasm, ikkalasi ham bo'lmasa placeholder */
 function HeroMedia({ image, videoUrl }: { image: string | null; videoUrl: string }) {
@@ -70,6 +71,8 @@ function HeroMedia({ image, videoUrl }: { image: string | null; videoUrl: string
 }
 
 export function Hero({ image = null, videoUrl = "" }: { image?: string | null; videoUrl?: string }) {
+  const hasMedia = Boolean(image) || Boolean(parseVideoUrl(videoUrl));
+
   return (
     <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
       {/* Background Decorative Elements */}
@@ -143,11 +146,16 @@ export function Hero({ image = null, videoUrl = "" }: { image?: string | null; v
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative lg:h-[600px] rounded-3xl overflow-hidden glass-card p-4 flex items-center justify-center"
+            className="relative lg:h-[600px] flex items-center justify-center"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 -z-10" />
-            {/* Rasm/video boshqaruv panelidan (Sayt sozlamalari -> Bosh sahifa kartasi) */}
-            <div className="relative w-full h-full min-h-[320px] rounded-2xl overflow-hidden bg-foreground/5 border border-foreground/10">
+            {/* Karta shaffof: faqat rasm/video ko'rinadi (Sayt sozlamalari -> Bosh sahifa kartasi).
+                Ikkalasi ham bo'sh bo'lsa joy egallab turgani bilinishi uchun uzuq chegara qoladi. */}
+            <div
+              className={cn(
+                "relative w-full h-full min-h-[320px] rounded-3xl overflow-hidden",
+                !hasMedia && "border border-dashed border-foreground/20",
+              )}
+            >
               <HeroMedia image={image} videoUrl={videoUrl} />
             </div>
           </motion.div>

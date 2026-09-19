@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, Globe, Send, MapPin, Phone, Mail, Play } from "lucide-react";
 import { getCourses, getSiteSettings } from "@/lib/api";
+import { SiteLogo } from "./SiteLogo";
 
 export async function Footer() {
   const currentYear = new Date().getFullYear();
@@ -21,9 +22,7 @@ export async function Footer() {
           {/* Brand Info */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-lg">
-                YT
-              </div>
+              <SiteLogo logo={settings?.logo ?? null} />
               <span className="font-bold text-xl leading-tight">
                 Yoshlar<br />Texnoparki
               </span>
@@ -56,6 +55,7 @@ export async function Footer() {
               <li><Link href="/" className="text-foreground/70 hover:text-blue-600 transition-colors text-sm">Bosh sahifa</Link></li>
               <li><Link href="/about" className="text-foreground/70 hover:text-blue-600 transition-colors text-sm">Biz haqimizda</Link></li>
               <li><Link href="/courses" className="text-foreground/70 hover:text-blue-600 transition-colors text-sm">Yo&apos;nalishlar</Link></li>
+              <li><Link href="/team" className="text-foreground/70 hover:text-blue-600 transition-colors text-sm">Jamoa</Link></li>
               <li><Link href="/projects" className="text-foreground/70 hover:text-blue-600 transition-colors text-sm">Startaplar</Link></li>
               <li><Link href="/events" className="text-foreground/70 hover:text-blue-600 transition-colors text-sm">Tadbirlar</Link></li>
               <li><Link href="/news" className="text-foreground/70 hover:text-blue-600 transition-colors text-sm">Yangiliklar</Link></li>

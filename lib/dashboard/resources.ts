@@ -502,6 +502,22 @@ export const RESOURCES: Record<string, Resource> = {
 
 export const SITE_SETTINGS_SECTIONS: Section[] = [
   {
+    title: "Logotip",
+    description: "Sayt yuqorisidagi menyuda va footerda ko'rinadi",
+    fields: [
+      {
+        name: "logo",
+        label: "Logotip",
+        type: "image",
+        full: true,
+        help:
+          "Kvadrat (1:1) PNG yoki SVG, foni shaffof bo'lsin. Kamida 200x200 px — " +
+          "saytda 40x40 px ko'rsatiladi, lekin Retina ekranlarda aniq chiqishi uchun kattarog'i kerak. " +
+          "Bo'sh qoldirilsa \"YT\" harflari chiqadi.",
+      },
+    ],
+  },
+  {
     title: "Aloqa ma'lumotlari",
     description: "Sayt footeri va aloqa sahifasida ko'rinadi",
     fields: [

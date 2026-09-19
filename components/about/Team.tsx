@@ -8,6 +8,8 @@ import type { TeamMember } from "@/lib/types";
 
 const CARD_STEP = 320;
 
+type TeamVariant = "carousel" | "grid";
+
 function initials(name: string) {
   return name
     .split(/\s+/)
@@ -17,7 +19,15 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-function MemberCard({ member, index }: { member: TeamMember; index: number }) {
+function MemberCard({
+  member,
+  index,
+  variant,
+}: {
+  member: TeamMember;
+  index: number;
+  variant: TeamVariant;
+}) {
   const links = [
     { href: member.telegramUrl, label: "Telegram", icon: Send },
     { href: member.linkedinUrl, label: "LinkedIn", icon: ExternalLink },
@@ -29,7 +39,11 @@ function MemberCard({ member, index }: { member: TeamMember; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: Math.min(index, 4) * 0.08 }}
-      className="group relative w-[70vw] shrink-0 snap-start sm:w-[280px]"
+      className={cn(
+        "group relative",
+        // Karuselda kartalar qat'iy kenglikda va yonma-yon suriladi, gridda esa katakni to'ldiradi
+        variant === "carousel" ? "w-[70vw] shrink-0 snap-start sm:w-[280px]" : "w-full",
+      )}
     >
       <div className="relative aspect-[3/4] overflow-hidden rounded-3xl border border-white/10 bg-foreground/5">
         {member.photo ? (
@@ -82,7 +96,17 @@ function MemberCard({ member, index }: { member: TeamMember; index: number }) {
   );
 }
 
-export function Team({ members }: { members: TeamMember[] }) {
+export function Team({
+  members,
+  variant = "carousel",
+  withHeading = true,
+}: {
+  members: TeamMember[];
+  /** `carousel` — boshqa sahifa ichidagi bo'lim, `grid` — alohida "Jamoa" sahifasi */
+  variant?: TeamVariant;
+  /** Sahifaning o'z sarlavhasi bo'lsa (`/team`), bo'lim sarlavhasi takrorlanmaydi */
+  withHeading?: boolean;
+}) {
   const scrollRef = useRef<HTMLUListElement>(null);
   const [edges, setEdges] = useState({ start: true, end: false });
 
@@ -106,52 +130,63 @@ export function Team({ members }: { members: TeamMember[] }) {
   const scroll = (direction: -1 | 1) =>
     scrollRef.current?.scrollBy({ left: direction * CARD_STEP, behavior: "smooth" });
 
-  return (
-    <section className="py-20 w-full overflow-hidden">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 md:flex-row md:items-end md:justify-between md:px-8">
-        <div>
-          <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-foreground md:text-5xl">
-            Bizning{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">jamoa</span>
-          </h2>
-          <p className="max-w-2xl text-lg text-foreground/70">
-            Texnoparkda yoshlarga bilim berayotgan va loyihalarni qo&apos;llab-quvvatlayotgan mutaxassislar.
-          </p>
-        </div>
+  const isCarousel = variant === "carousel";
 
-        <div className="hidden items-center gap-3 md:flex">
-          <button
-            type="button"
-            onClick={() => scroll(-1)}
-            disabled={edges.start}
-            aria-label="Oldingi"
-            className="flex h-12 w-12 items-center justify-center rounded-full glass text-foreground transition-opacity hover:bg-foreground/5 disabled:opacity-30"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          <button
-            type="button"
-            onClick={() => scroll(1)}
-            disabled={edges.end}
-            aria-label="Keyingi"
-            className="flex h-12 w-12 items-center justify-center rounded-full glass text-foreground transition-opacity hover:bg-foreground/5 disabled:opacity-30"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </button>
+  return (
+    <section className={cn("w-full", isCarousel ? "py-20 overflow-hidden" : "pb-4")}>
+      {(withHeading || isCarousel) && (
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 md:flex-row md:items-end md:justify-between md:px-8">
+          {withHeading && (
+            <div>
+              <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-foreground md:text-5xl">
+                Bizning{" "}
+                <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">jamoa</span>
+              </h2>
+              <p className="max-w-2xl text-lg text-foreground/70">
+                Texnoparkda yoshlarga bilim berayotgan va loyihalarni qo&apos;llab-quvvatlayotgan mutaxassislar.
+              </p>
+            </div>
+          )}
+
+          {isCarousel && (
+            <div className="hidden items-center gap-3 md:ml-auto md:flex">
+              <button
+                type="button"
+                onClick={() => scroll(-1)}
+                disabled={edges.start}
+                aria-label="Oldingi"
+                className="flex h-12 w-12 items-center justify-center rounded-full glass text-foreground transition-opacity hover:bg-foreground/5 disabled:opacity-30"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scroll(1)}
+                disabled={edges.end}
+                aria-label="Keyingi"
+                className="flex h-12 w-12 items-center justify-center rounded-full glass text-foreground transition-opacity hover:bg-foreground/5 disabled:opacity-30"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </div>
+          )}
         </div>
-      </div>
+      )}
 
       <ul
         ref={scrollRef}
-        onScroll={updateEdges}
+        onScroll={isCarousel ? updateEdges : undefined}
         className={cn(
-          "mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-4 md:px-8",
-          "hide-scrollbar mx-auto max-w-7xl",
+          "mx-auto max-w-7xl px-4 md:px-8",
+          isCarousel
+            ? "hide-scrollbar mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4"
+            : "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+          withHeading && !isCarousel && "mt-12",
         )}
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        style={isCarousel ? { scrollbarWidth: "none", msOverflowStyle: "none" } : undefined}
       >
         {members.map((member, index) => (
-          <MemberCard key={member.id} member={member} index={index} />
+          <MemberCard key={member.id} member={member} index={index} variant={variant} />
         ))}
       </ul>
     </section>

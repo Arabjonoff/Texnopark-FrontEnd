@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/*
+  Rejim (tungi/kunduzgi) `<html data-theme="...">` bilan boshqariladi.
+  Atribut qo'yilmagan bo'lsa (JS o'chiq) tizim sozlamasi ishlaydi — shuning uchun
+  har bir rang bloki ikki marta yoziladi: media query va data-theme uchun.
+*/
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --color-brand-primary: #3b82f6; /* Modern Blue */
   --color-brand-secondary: #8b5cf6; /* Modern Purple */
@@ -24,15 +31,19 @@
   --color-dash-chart: var(--dash-chart);
 }
 
+/* Kunduzgi rejim: sof oq emas — yumshoq neytral fon, ko'z kamroq charchaydi */
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  color-scheme: light;
+  --background: #f1f2f4;
+  --foreground: #1a1a1a;
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #1a1a1a;
 }
 
+/* Tungi rejim ranglari o'zgarmadi */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --background: #020617;
     --foreground: #f8fafc;
     --card: #0f172a;
@@ -40,9 +51,18 @@
   }
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #020617;
+  --foreground: #f8fafc;
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
+  transition: background-color 0.2s ease, color 0.2s ease;
   font-family: var(--font-sans), sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -62,7 +82,7 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --dash-bg: #0a1020;
     --dash-surface: #0f172a;
     --dash-subtle: #16203a;
@@ -72,6 +92,24 @@ body {
     --dash-primary: #3b82f6;
     --dash-primary-hover: #60a5fa;
     --dash-chart: #3b82f6;
+  }
+}
+
+:root[data-theme="dark"] {
+  --dash-bg: #0a1020;
+  --dash-surface: #0f172a;
+  --dash-subtle: #16203a;
+  --dash-border: #1f2b42;
+  --dash-text: #e6eaf2;
+  --dash-muted: #94a3b8;
+  --dash-primary: #3b82f6;
+  --dash-primary-hover: #60a5fa;
+  --dash-chart: #3b82f6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
   }
 }
 
@@ -89,31 +127,54 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (prefers-color-scheme: dark) {
-  .glass {
+  :root:not([data-theme="light"]) .glass {
     background: rgba(15, 23, 42, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
 
+[data-theme="dark"] .glass {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.45));
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .glass-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+  }
+}
+
+[data-theme="dark"] .glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
 }
 
-/* Subtle Grid Pattern */
-.bg-grid-pattern {
-  background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+/* Nuqtali to'r (dot grid) — oldingi kvadrat to'r o'rniga */
+.bg-dot-pattern {
+  background-size: 28px 28px;
+  background-position: -1px -1px;
+  background-image: radial-gradient(circle, rgba(15, 23, 42, 0.16) 1.2px, transparent 1.2px);
 }
+
 @media (prefers-color-scheme: dark) {
-  .bg-grid-pattern {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  :root:not([data-theme="light"]) .bg-dot-pattern {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.11) 1.2px, transparent 1.2px);
   }
+}
+
+[data-theme="dark"] .bg-dot-pattern {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.11) 1.2px, transparent 1.2px);
 }
 
 /* Gorizontal karusellarda skrollbarni yashirish */

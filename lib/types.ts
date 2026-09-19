@@ -52,6 +52,7 @@ export type Event = EventSummary & {
 };
 
 export type SiteSettings = {
+  logo: string | null;
   phone: string;
   email: string;
   address: string;

@@ -1,12 +1,11 @@
 import { WhyTechnoPark } from "@/components/about/WhyTechnoPark";
 import { Laboratory } from "@/components/about/Laboratory";
-import { Team } from "@/components/about/Team";
-import { getEquipment, getFeatures, getTeam } from "@/lib/api";
+import { getEquipment, getFeatures } from "@/lib/api";
 
 export const revalidate = 60;
 
 export default async function AboutPage() {
-  const [features, equipment, team] = await Promise.all([getFeatures(), getEquipment(), getTeam()]);
+  const [features, equipment] = await Promise.all([getFeatures(), getEquipment()]);
 
   return (
     <div className="pt-10 pb-24 min-h-screen">
@@ -19,7 +18,6 @@ export default async function AboutPage() {
         </p>
       </div>
       <WhyTechnoPark features={features} />
-      <Team members={team} />
       <Laboratory equipment={equipment} />
     </div>
   );
